@@ -27,7 +27,7 @@ class Tree {
         });
 
         let endIndex = tree.length - 1;
-        let middleIndex = Math.floor(endIndex / 2);
+        let middleIndex = Math.round(endIndex / 2);
         console.log(middleIndex);
         return tree[middleIndex]
     }

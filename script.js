@@ -12,27 +12,43 @@ class Tree {
         this.root = null;
     }
 
-    buildTree(array) {
-        
+    sortArray(array) {
         array.sort( (a,b) => { return a - b});
         array = array.filter( (value, index) => array.indexOf(value) === index);
-        console.log(array);
-        
-        let tree = [];
-        array.forEach( (element) => {
-            if (!tree.includes(element)) {
-                const node = new Node(element);
-                tree.push(node);
-            }
-        });
+        return array;
+    }
 
-        let endIndex = tree.length - 1;
-        let middleIndex = Math.round(endIndex / 2);
-        console.log(middleIndex);
-        return tree[middleIndex]
+    buildTree(arr, start, end) {
+
+        if (start > end) {
+            return null;
+        } else {
+            let mid = Math.floor((start + end) / 2);
+            const node = new Node(arr[mid]);
+            node.left = this.buildTree(arr, start, mid - 1);
+            node.right = this.buildTree(arr, mid + 1, end)
+            return node;
+        }
     }
 }
 
+const prettyPrint = (node, prefix = "", isLeft = true) => {
+    if (node === null) {
+      return;
+    }
+    if (node.right !== null) {
+      prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+    }
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
+    if (node.left !== null) {
+      prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+    }
+  };
+
 
 const tree = new Tree();
-tree.buildTree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+const givenArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+let sortedArray = tree.sortArray(givenArray);
+tree.root = tree.buildTree(sortedArray, 0, sortedArray.length - 1);
+
+prettyPrint(tree.root);

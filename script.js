@@ -19,7 +19,6 @@ class Tree {
     }
 
     buildTree(arr, start, end) {
-
         if (start > end) {
             return null;
         } else {
@@ -28,6 +27,29 @@ class Tree {
             node.left = this.buildTree(arr, start, mid - 1);
             node.right = this.buildTree(arr, mid + 1, end)
             return node;
+        }
+    }
+
+    insert(value) {
+        let currentNode = this.root;
+        let parent = null;
+
+        while (currentNode !== null) {
+            parent = currentNode;
+            if(currentNode.value > value) {
+                currentNode = currentNode.left;
+            }
+            else if (currentNode.value < value) {
+                currentNode = currentNode.right;
+            } else {
+                return; //If duplicate value, do nothing
+            }
+        }
+
+        if (value < parent.value) {
+            parent.left = new Node(value);
+        } else {
+            parent.right = new Node(value);
         }
     }
 }
@@ -50,5 +72,7 @@ const tree = new Tree();
 const givenArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 let sortedArray = tree.sortArray(givenArray);
 tree.root = tree.buildTree(sortedArray, 0, sortedArray.length - 1);
-
+prettyPrint(tree.root);
+tree.insert(16);
+console.log(`----------------------------`)
 prettyPrint(tree.root);

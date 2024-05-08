@@ -52,6 +52,60 @@ class Tree {
             parent.right = new Node(value);
         }
     }
+
+    delete(value) {
+        
+        let currentNode = this.root;
+        let parent = null;
+        
+        //finds node that needs to be deleted
+        while (currentNode.value !== value) {
+            if (value < currentNode.value) {
+                parent = currentNode;
+                currentNode = currentNode.left;
+            } else {
+                parent = currentNode;
+                currentNode = currentNode.right;
+            }
+        }
+
+        //if node has no child
+        if (currentNode.left === null && currentNode.right === null) {
+            if (value < parent.value) {
+                parent.left = null;
+            } else {
+                parent.right = null;
+            }
+        }
+        
+        //if node has only one child
+        if (currentNode.left === null && currentNode.right !== null) {
+            if (value < parent.value) {
+                parent.left = currentNode.right;
+            } else {
+                parent.right = currentNode.right;
+            }
+        }
+        
+        if (currentNode.left !== null && currentNode.right === null) {
+            if (value < parent.value) {
+                parent.left = currentNode.left;
+            } else {
+                parent.right = currentNode.left;
+            }
+        }
+
+        //if node has two child
+        if (currentNode.left !== null && currentNode.right !== null) {
+            //find node right child's extreme left node
+            let minRight = currentNode.right;
+            while (minRight.left !== null) {
+                minRight = minRight.left;
+            }
+            this.delete(minRight.value);
+            currentNode.value = minRight.value;
+        }
+    }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -76,3 +130,17 @@ prettyPrint(tree.root);
 tree.insert(16);
 console.log(`----------------------------`)
 prettyPrint(tree.root);
+console.log(`----------------------------`)
+tree.delete(67);
+prettyPrint(tree.root);
+console.log(`----------------------------`)
+console.log(`----------------------------`)
+console.log(`----------------------------`)
+const anotherArray = [50,30,70,20,40,40,60,80];
+const anotherTree = new Tree();
+let sortedAnotherArray = anotherTree.sortArray(anotherArray);
+anotherTree.root = anotherTree.buildTree(sortedAnotherArray, 0, sortedAnotherArray.length - 1);
+prettyPrint(anotherTree.root);
+anotherTree.delete(50);
+prettyPrint(anotherTree.root);
+

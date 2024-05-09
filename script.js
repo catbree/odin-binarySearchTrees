@@ -106,6 +106,168 @@ class Tree {
             currentNode.value = minRight.value;
         }
     }
+
+    find(value) {
+        let currentNode = this.root;
+
+        while(currentNode.value !== value) {
+            if(value < currentNode.value) {
+                currentNode = currentNode.left;
+            } else {
+                currentNode = currentNode.right
+            }
+        }
+
+        return currentNode;
+    }
+
+    levelOrderIteration() {
+        let queue = [];
+        let currentNode = this.root;
+
+        if (this.root === null) {
+            return;
+        }
+
+        queue.push(this.root);
+
+        while (queue.length !== 0) {
+            currentNode = queue.at(0);
+            console.log(currentNode);
+
+            if(currentNode.left !== null) {
+                queue.push(currentNode.left);
+            }
+            if(currentNode.right !== null) {
+                queue.push(currentNode.right);
+            }
+
+            queue.shift();
+
+        }
+    }
+
+    levelOrderRecursive(callback = null) {
+        if (!this.root) return [];
+
+        let queue = [this.root];
+        let result = [];
+
+        const traverse = () => {
+
+            const nextLevelNodes = [];
+
+            queue.forEach(node => {
+                if(callback) {
+                    callback(node.value);
+                } else {
+                    result.push(node.value);
+                }
+
+                if(node.left) {
+                    nextLevelNodes.push(node.left);
+                }
+
+                if(node.right) {
+                    nextLevelNodes.push(node.right);
+                }
+            });
+
+            if (nextLevelNodes.length > 0) {
+                queue.length = 0;
+                queue.push(...nextLevelNodes)
+                traverse();
+            }
+        }
+        traverse();
+        return result;
+
+    }
+
+    inOrder(callback=null) {
+
+        let result = [];
+
+        const traverse = (node) => {
+
+            if (node === null) {
+                return;
+            }
+
+            
+            if(node.left !== null) {
+                traverse(node.left);
+            }
+
+            if(callback) {
+                callback(node.value);
+            } else {
+                result.push(node.value);
+            }
+            
+            if(node.right !== null) {
+                traverse(node.right);
+            }
+        }
+        traverse(this.root);
+        return result;
+    }
+
+    preOrder(callback=null) {
+
+        let result = [];
+
+        const traverse = (node) => {
+
+            if (node === null) {
+                return;
+            }
+
+            if(callback) {
+                callback(node.value);
+            } else {
+                result.push(node.value);
+            }
+
+            if(node.left !== null) {
+                traverse(node.left);
+            }
+            
+            if(node.right !== null) {
+                traverse(node.right);
+            }
+        }
+        traverse(this.root);
+        return result;
+    }
+
+    postOrder(callback=null) {
+
+        let result = [];
+
+        const traverse = (node) => {
+
+            if (node === null) {
+                return;
+            }
+
+            if(node.left !== null) {
+                traverse(node.left);
+            }
+            
+            if(node.right !== null) {
+                traverse(node.right);
+            }
+
+            if(callback) {
+                callback(node.value);
+            } else {
+                result.push(node.value);
+            }
+        }
+        traverse(this.root);
+        return result;
+    }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -123,24 +285,32 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 
 const tree = new Tree();
-const givenArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+const givenArray = [1, 2, 3, 4, 5, 7]
 let sortedArray = tree.sortArray(givenArray);
 tree.root = tree.buildTree(sortedArray, 0, sortedArray.length - 1);
+// prettyPrint(tree.root);
+// tree.insert(16);
+// console.log(`----------------------------`)
+// prettyPrint(tree.root);
+// console.log(`----------------------------`)
+// tree.delete(67);
+// prettyPrint(tree.root);
+// console.log(`----------------------------`)
+// console.log(`----------------------------`)
+// console.log(`----------------------------`)
+// const anotherArray = [50,30,70,20,40,40,60,80];
+// const anotherTree = new Tree();
+// let sortedAnotherArray = anotherTree.sortArray(anotherArray);
+// anotherTree.root = anotherTree.buildTree(sortedAnotherArray, 0, sortedAnotherArray.length - 1);
+// prettyPrint(anotherTree.root);
+// anotherTree.delete(50);
+// prettyPrint(anotherTree.root);
+// console.log(anotherTree.find(20));
+// tree.levelOrderIteration();
+// console.log(tree.levelOrderRecursive());
 prettyPrint(tree.root);
-tree.insert(16);
-console.log(`----------------------------`)
-prettyPrint(tree.root);
-console.log(`----------------------------`)
-tree.delete(67);
-prettyPrint(tree.root);
-console.log(`----------------------------`)
-console.log(`----------------------------`)
-console.log(`----------------------------`)
-const anotherArray = [50,30,70,20,40,40,60,80];
-const anotherTree = new Tree();
-let sortedAnotherArray = anotherTree.sortArray(anotherArray);
-anotherTree.root = anotherTree.buildTree(sortedAnotherArray, 0, sortedAnotherArray.length - 1);
-prettyPrint(anotherTree.root);
-anotherTree.delete(50);
-prettyPrint(anotherTree.root);
+console.log(tree.inOrder());
+// tree.inOrder((value) => console.log(value));
+console.log(tree.preOrder());
+console.log(tree.postOrder());
 

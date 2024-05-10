@@ -268,6 +268,53 @@ class Tree {
         traverse(this.root);
         return result;
     }
+
+    height(node) {
+
+        let leftHeight = 0;
+        let rightHeight = 0;
+        let currentNode = this.root;
+        
+        currentNode = this.find(node.value);
+        while (currentNode.left !== null) {
+            currentNode = currentNode.left;
+            leftHeight++;
+        }
+
+        currentNode = this.find(node.value);
+        while (currentNode.right !== null) {
+            currentNode = currentNode.right;
+            rightHeight++;
+        }
+
+        if (leftHeight > rightHeight) {
+            return leftHeight;
+        } else {
+            return rightHeight;
+        }
+
+
+
+    }
+
+    depth(node) {
+        
+        let currentNode = this.root;
+        let currentDepth = 0;
+
+        while (currentNode.value !== node.value) {
+            
+            if (node.value < currentNode.value) {
+                currentNode = currentNode.left;
+            } else {
+                currentNode = currentNode.right;
+            }
+            
+            currentDepth++;
+        }
+
+        return currentDepth;
+    }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -309,8 +356,11 @@ tree.root = tree.buildTree(sortedArray, 0, sortedArray.length - 1);
 // tree.levelOrderIteration();
 // console.log(tree.levelOrderRecursive());
 prettyPrint(tree.root);
-console.log(tree.inOrder());
-// tree.inOrder((value) => console.log(value));
-console.log(tree.preOrder());
-console.log(tree.postOrder());
+// console.log(tree.inOrder());
+// // tree.inOrder((value) => console.log(value));
+// console.log(tree.preOrder());
+// console.log(tree.postOrder());
+console.log(tree.depth(tree.find(3)));
+console.log(tree.height(tree.find(3)));
+
 

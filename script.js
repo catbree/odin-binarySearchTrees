@@ -351,6 +351,12 @@ class Tree {
 
         return balanceStatus;
     }
+
+    rebalance() {
+        let arr = this.inOrder();
+        let sortedArr = this.sortArray(arr);
+        this.root = this.buildTree(sortedArr, 0, sortedArr.length - 1);
+    }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -396,6 +402,7 @@ console.log(tree.isBalanced());
 tree.insert(16);
 tree.insert(15);
 tree.insert(18);
+console.log(`----------------------------`)
 
 prettyPrint(tree.root);
 // console.log(tree.inOrder());
@@ -408,6 +415,11 @@ prettyPrint(tree.root);
 // console.log(tree.height(tree.find(1)));
 
 console.log(tree.isBalanced());
+console.log(`----------------------------`)
+
+tree.rebalance();
+prettyPrint(tree.root);
+
 
 
 
